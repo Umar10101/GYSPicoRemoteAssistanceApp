@@ -11,6 +11,9 @@ public class OverlayDataReceiver : MonoBehaviour
     private Image uiElementImage;       // Reference to the UI element's Image component
     private Coroutine fadeCoroutine;    // Reference to the current fade coroutine
 
+    private float targetHeightPercentage = 1.0f; // 72.5% of the total height
+    private float targetWidthPercentage = 1.0f;   // 58% of the total width
+
     void Start()
     {
         uiElementImage = uiElement.GetComponent<Image>();
@@ -24,15 +27,23 @@ public class OverlayDataReceiver : MonoBehaviour
         // Deserialize the received JSON message into a ClickData object
         ClickData clickData = JsonUtility.FromJson<ClickData>(message);
 
-        // Get the size of the VR Canvas
-        Vector2 vrCanvasSize = vrCanvas.pixelRect.size;
+        // Fixed receiver canvas size
+        Vector2 receiverCanvasSize = new Vector2(4320, 2160);
 
-        // Denormalize the position based on the VR Canvas size
-        float adjustedX = (clickData.x * vrCanvasSize.x) - (vrCanvasSize.x / 2);
-        float adjustedY = (clickData.y * vrCanvasSize.y) - (vrCanvasSize.y / 2);
+        // Calculate the specific area based on the given percentages
+        float targetHeight = receiverCanvasSize.y * targetHeightPercentage;
+        float targetWidth = receiverCanvasSize.x * targetWidthPercentage;
 
-        // Set the UI element's local position within the canvas
-        uiElement.localPosition = new Vector2(adjustedX, adjustedY);
+        // Calculate the offset from the edges to position the area
+        float offsetY = (receiverCanvasSize.y - targetHeight) / 2;
+        float offsetX = (receiverCanvasSize.x - targetWidth) / 2;
+
+        // Denormalize the position based on the adjusted receiver canvas size
+        float adjustedX = clickData.x * targetWidth - (receiverCanvasSize.x / 2 - offsetX);
+        float adjustedY = clickData.y * targetHeight - (receiverCanvasSize.y / 2 - offsetY);
+
+        // Set the UI element's anchored position within the canvas
+        uiElement.anchoredPosition = new Vector2(adjustedX, adjustedY);
 
         // Change the UI element's opacity to 1 and restart the fade coroutine
         SetUIElementOpacity(1);
@@ -72,5 +83,7 @@ public class OverlayDataReceiver : MonoBehaviour
     {
         public float x;
         public float y;
+        public float canvasWidth;
+        public float canvasHeight;
     }
 }

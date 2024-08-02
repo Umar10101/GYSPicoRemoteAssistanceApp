@@ -117,6 +117,15 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.recorder": {
+      "version": "4.0.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.test-framework": {
       "version": "1.1.33",
       "depth": 0,
@@ -206,7 +215,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.picoxr": {
-      "version": "file:../PICO Unity Integration SDK_250",
+      "version": "file:/Users/sid/Desktop/untitled folder 4/TestServer_v2.2.4/Resources/FMWebSocket/GYSPicoRemoteAssistanceApp/PICO Unity Integration SDK_250",
       "depth": 0,
       "source": "local",
       "dependencies": {
